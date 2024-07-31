@@ -1,0 +1,11 @@
+[tool.ruff]
+exclude = [".venv", "llama2_c", "typings"]
+
+[tool.ruff.lint]
+ignore = [
+    "F722",  # [Syntax error in forward annotation]: to work with jaxtyping
+]
+
+[tool.pyright]
+exclude = [".venv", "llama2_c", "typings"]
+typeCheckingMode = "strict"

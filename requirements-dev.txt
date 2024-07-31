@@ -1,0 +1,5 @@
+-r requirements.txt
+pyright==1.1.373
+pytest==8.3.2
+ruff==0.5.5
+torch==2.2.2
