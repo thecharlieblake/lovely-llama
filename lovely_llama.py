@@ -68,9 +68,9 @@ class FFNSwiGLU(eqx.Module):
         self.w2 = normal(k_w2, (dim_ffn, dim))
 
     def __call__(self, x: Float[Array, " dim"]) -> Float[Array, " dim"]:
-        x = vmap(swish)(x @ self.w)
-        x *= x @ self.v
-        return x @ self.w2
+        x_ffn = vmap(swish)(x @ self.w)
+        x_ffn *= x @ self.v
+        return x_ffn @ self.w2
 
 
 class PreNormResidualBlock(eqx.Module):

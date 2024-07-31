@@ -6,10 +6,11 @@ from equinox import filter_grad
 from jax import Array, grad, vmap
 from torch.nn import Parameter
 
-from llama2_c.model import FeedForward as TorchFFNSwiGLU
-from llama2_c.model import RMSNorm as TorchRMSNorm
-from llama2_c.model import apply_rotary_emb, precompute_freqs_cis
-from model import FFNSwiGLU, RMSNorm, rope
+# `model` from "llama2_c/"
+from model import FeedForward as TorchFFNSwiGLU
+from model import RMSNorm as TorchRMSNorm
+from model import apply_rotary_emb, precompute_freqs_cis
+from lovely_llama import FFNSwiGLU, RMSNorm, rope
 
 
 def to_tensor(jax_array):

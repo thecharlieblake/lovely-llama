@@ -11,11 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+# Modified here by Charlie Blake, under the MIT license.
 import abc
 from collections.abc import Callable, Sequence
 from typing import Any, Union
-import numpy as np
 
+import numpy as np
 from jax._src.sharding import Sharding
 from jax._src.typing import DTypeLike
 

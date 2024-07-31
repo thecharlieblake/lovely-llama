@@ -1,0 +1,119 @@
+#!/usr/bin/env python
+# Copyright (c) 2023 Graphcore Ltd. All rights reserved.
+
+"""Dev task launcher."""
+
+import argparse
+import os
+import subprocess
+import sys
+from typing import Any, Callable, Iterable, List, Optional, TypeVar
+
+# Utilities
+
+
+def run(command: Iterable[Any]) -> None:
+    """Run a command, terminating on failure."""
+    cmd = [str(arg) for arg in command if arg is not None]
+    print("$ " + " ".join(cmd), file=sys.stderr)
+    environ = os.environ.copy()
+    environ["PYTHONPATH"] = f"{os.getcwd()}:{environ.get('PYTHONPATH', '')}"
+    exit_code = subprocess.call(cmd, env=environ)
+    if exit_code:
+        sys.exit(exit_code)
+
+
+T = TypeVar("T")
+
+
+def cli(*args: Any, **kwargs: Any) -> Callable[[T], T]:
+    """Declare a CLI command / arguments for that command."""
+
+    def wrap(func: T) -> T:
+        if not hasattr(func, "cli_args"):
+            setattr(func, "cli_args", [])
+        if args or kwargs:
+            getattr(func, "cli_args").append((args, kwargs))
+        return func
+
+    return wrap
+
+
+# Commands
+
+
+@cli("-k", "--filter")
+def tests(filter: Optional[str]) -> None:
+    """run Python tests"""
+    run(
+        [
+            "python",
+            "-m",
+            "pytest",
+            None if filter else "--cov",
+            *(["-k", filter] if filter else []),
+        ]
+    )
+
+
+@cli("commands", nargs="*")
+def python(commands: List[Any]) -> None:
+    """run Python with the current directory on PYTHONPATH, for development"""
+    run(["python"] + commands)
+
+
+@cli()
+def type_check() -> None:
+    """run static analysis"""
+    run(["python", "-m", "pyright"])
+
+
+@cli("--check", action="store_true")
+def format(check: bool) -> None:
+    """autoformat all sources"""
+    run(["python", "-m", "ruff", "check" if check else None])
+
+
+@cli(
+    "-s",
+    "--skip",
+    nargs="*",
+    default=[],
+    choices=["format", "type_check", "tests"],
+    help="commands to skip",
+)
+def ci(skip: List[str] = []) -> None:
+    """run all continuous integration tests & checks"""
+    if "format" not in skip:
+        format(check=True)
+    if "type_check" not in skip:
+        type_check()
+    if "tests" not in skip:
+        tests(filter=None)
+
+
+# Script
+
+
+def _main() -> None:
+    # Build an argparse command line by finding globals in the current module
+    # that are marked via the @cli() decorator. Each one becomes a subcommand
+    # running that function, usage "$ ./dev fn_name ...args".
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.set_defaults(command=ci)
+
+    subs = parser.add_subparsers()
+    for key, value in globals().items():
+        if hasattr(value, "cli_args"):
+            sub = subs.add_parser(key.replace("_", "-"), help=value.__doc__)
+            for args, kwargs in value.cli_args:
+                sub.add_argument(*args, **kwargs)
+            sub.set_defaults(command=value)
+
+    cli_args = vars(parser.parse_args())
+    command = cli_args.pop("command")
+    command(**cli_args)
+
+
+if __name__ == "__main__":
+    _main()
