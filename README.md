@@ -4,6 +4,7 @@ An implementation of the Llama architecture, to instruct and delight.
 ## Setup
 
 ### Users
+
 ```
 python -m venv .venv
 source .venv/bin/activate
@@ -11,8 +12,9 @@ pip install -r requirements.txt
 ```
 
 ### Developers
+
 ```
-git clone --recursive  # to run tests (against llama.c)
+git submodule update --init
 python -m venv .venv
 echo 'PYTHONPATH="${PYTHONPATH:+$PYTHONPATH:}llama2_c"' >> .venv/bin/activate
 source .venv/bin/activate
@@ -24,8 +26,12 @@ and run `./dev` for test, type-checking and formatting (see `./dev --help`).
 
 ## Todo
 
-1. ci
-2. get implementing!
+1. implement model
+2. write design criteria section here
+3. compare model training loss to baseline and fix any issues
+4. implement training and optim
+5. compare against baseline again
+6. tidy and write anything for contributors
 
 ## License
 

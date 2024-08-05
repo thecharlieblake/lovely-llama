@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push: { branches: ["main"] }
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  # Run everything on main, most-recent on PR builds
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git
+          git submodule update --init
+          pip install -r requirements-dev.txt
+      - name: Run CI
+        run: |
+          env PYTHONPATH=${PYTHONPATH:+$PYTHONPATH:}$(pwd)/llama2_c ./dev ci

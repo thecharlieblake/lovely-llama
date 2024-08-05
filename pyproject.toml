@@ -17,4 +17,4 @@ addopts = "--jaxtyping-packages=lovely_llama,beartype.beartype --cov-report term
 filterwarnings = "ignore:jax.core.pp_eqn_rules"  # deprecated pretty print in equinox
 
 [tool.coverage.run]
-omit = ["llama2_c/*", "test_*"]
+omit = ["llama2_c/*", "test_*", "/usr/lib/*"]
