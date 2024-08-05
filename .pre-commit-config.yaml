@@ -2,8 +2,10 @@
 repos:
 -   repo: local
     hooks:
-    -   id: run-dev-script
-        name: Run dev script
+    -   id: run-dev-script-pre-push
+        name: Run dev script before push
         entry: ./dev
         language: script
+        stages: [push]
         files: .*
+
