@@ -16,7 +16,7 @@ python -m venv .venv
 echo 'PYTHONPATH="${PYTHONPATH:+$PYTHONPATH:}llama2_c"' >> .venv/bin/activate
 source .venv/bin/activate
 pip install -r requirements-dev.txt
-pre-commit install
+pre-commit install --hook-type pre-push
 git clone --recursive  # to run tests (against llama.c)
 chmod 755 dev
 ```

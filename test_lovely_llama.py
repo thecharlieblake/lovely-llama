@@ -4,12 +4,13 @@ import numpy as np
 import torch
 from equinox import filter_grad
 from jax import Array, grad, vmap
-from torch.nn import Parameter
 
 # `model` from "llama2_c/"
 from model import FeedForward as TorchFFNSwiGLU
 from model import RMSNorm as TorchRMSNorm
 from model import apply_rotary_emb, precompute_freqs_cis
+from torch.nn import Parameter
+
 from lovely_llama import FFNSwiGLU, RMSNorm, rope
 
 
