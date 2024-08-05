@@ -59,20 +59,21 @@ def swish(x: FloatScalar) -> FloatScalar:
 class FFNSwiGLU(eqx.Module):
     """See https://arxiv.org/abs/2002.05202, eqn (6)."""
 
-    w: Float[Array, "dim dim_ffn"]
-    v: Float[Array, "dim dim_ffn"]
-    w2: Float[Array, "dim_ffn dim"]
+    w_gate: Float[Array, "dim dim_ffn"]
+    w_in: Float[Array, "dim dim_ffn"]
+    w_out: Float[Array, "dim_ffn dim"]
 
     def __init__(self, dim: int, dim_ffn: int, key: Array):
-        k_w, k_v, k_w2 = split(key, 3)
-        self.w = normal(k_w, (dim, dim_ffn))
-        self.v = normal(k_v, (dim, dim_ffn))
-        self.w2 = normal(k_w2, (dim_ffn, dim))
+        k_in, k_gate, k_out = split(key, 3)
+        self.w_gate = normal(k_gate, (dim, dim_ffn))
+        self.w_in = normal(k_in, (dim, dim_ffn))
+        self.w_out = normal(k_out, (dim_ffn, dim))
 
     def __call__(self, x: Float[Array, " dim"]) -> Float[Array, " dim"]:
-        x_ffn = vmap(swish)(x @ self.w)
-        x_ffn *= x @ self.v
-        return x_ffn @ self.w2
+        gate = x @ self.w_gate
+        x = vmap(swish)(x @ self.w_in)
+        x *= gate
+        return x @ self.w_out
 
 
 class PreNormResidualBlock(eqx.Module):

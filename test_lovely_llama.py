@@ -44,9 +44,9 @@ torch_X = to_tensor(X)
 def test_ffn_swiglu():
     ffn_swiglu = FFNSwiGLU(D_MODEL, D_MODEL + 1, KEY)
     torch_ffn_swiglu = TorchFFNSwiGLU(D_MODEL, D_MODEL + 1, D_MODEL + 1, dropout=0.0)
-    torch_ffn_swiglu.w1.weight = to_param(ffn_swiglu.w.T)
-    torch_ffn_swiglu.w2.weight = to_param(ffn_swiglu.w2.T)
-    torch_ffn_swiglu.w3.weight = to_param(ffn_swiglu.v.T)
+    torch_ffn_swiglu.w3.weight = to_param(ffn_swiglu.w_gate.T)
+    torch_ffn_swiglu.w1.weight = to_param(ffn_swiglu.w_in.T)
+    torch_ffn_swiglu.w2.weight = to_param(ffn_swiglu.w_out.T)
 
     assert_allclose(vmap(ffn_swiglu)(X), torch_ffn_swiglu(torch_X))
 
@@ -54,12 +54,12 @@ def test_ffn_swiglu():
     grads = filter_grad(loss)(ffn_swiglu, X)
 
     assert isinstance(grads, FFNSwiGLU)
-    assert isinstance(grads.w, Array)
-    assert isinstance(grads.w2, Array)
-    assert isinstance(grads.v, Array)
-    assert (grads.w != 0).all()
-    assert (grads.w2 != 0).all()
-    assert (grads.v != 0).all()
+    assert isinstance(grads.w_gate, Array)
+    assert isinstance(grads.w_in, Array)
+    assert isinstance(grads.w_out, Array)
+    assert (grads.w_gate != 0).all()
+    assert (grads.w_in != 0).all()
+    assert (grads.w_out != 0).all()
 
 
 def test_rms_norm():
