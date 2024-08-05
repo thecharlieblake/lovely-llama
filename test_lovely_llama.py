@@ -64,7 +64,7 @@ def test_ffn_swiglu():
 def test_rms_norm():
     rms_norm = RMSNorm(D_MODEL)
     torch_rms_norm = TorchRMSNorm(D_MODEL, 1e-5)
-    torch_rms_norm.weight = to_param(rms_norm.g)
+    torch_rms_norm.weight = to_param(rms_norm.gain)
 
     assert_allclose(vmap(rms_norm)(X), torch_rms_norm(torch_X))
 
@@ -72,9 +72,9 @@ def test_rms_norm():
     grads = filter_grad(loss)(rms_norm, X)
 
     assert isinstance(grads, RMSNorm)
-    assert isinstance(grads.g, Array)
-    assert (grads.g != 0).all()
-    assert (grads.g != 1).all()
+    assert isinstance(grads.gain, Array)
+    assert (grads.gain != 0).all()
+    assert (grads.gain != 1).all()
 
 
 def test_rope():
