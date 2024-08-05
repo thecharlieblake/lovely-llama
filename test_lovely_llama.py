@@ -57,7 +57,7 @@ def test_ffn_swiglu():
     assert isinstance(grads.w2, Array)
     assert isinstance(grads.v, Array)
     assert (grads.w != 0).all()
-    assert (grads.w22 != 0).all()
+    assert (grads.w2 != 0).all()
     assert (grads.v != 0).all()
 
 

@@ -5,7 +5,6 @@ repos:
     -   id: run-dev-script-pre-push
         name: Run dev script before push
         entry: ./dev
-        language: script
-        stages: [push]
-        files: .*
+        language: python
+        stages: [pre-push]
 
