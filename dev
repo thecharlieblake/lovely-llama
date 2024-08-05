@@ -63,7 +63,7 @@ def python(commands: List[Any]) -> None:
 
 
 @cli()
-def type_check() -> None:
+def static_type_check() -> None:
     """run static analysis"""
     run(["python", "-m", "pyright"])
 
@@ -86,8 +86,8 @@ def ci(skip: List[str] = []) -> None:
     """run all continuous integration tests & checks"""
     if "format" not in skip:
         format(check=True)
-    if "type_check" not in skip:
-        type_check()
+    if "static_type_check" not in skip:
+        static_type_check()
     if "tests" not in skip:
         tests(filter=None)
 

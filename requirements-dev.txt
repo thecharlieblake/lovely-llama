@@ -1,4 +1,5 @@
 -r requirements.txt
+beartype==0.18.5
 numpy==1.26.4
 pre-commit==3.8.0
 pyright==1.1.374

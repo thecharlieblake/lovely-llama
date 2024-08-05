@@ -1,5 +1,5 @@
 # lovely-llama
-A most pleasing implementation of the Llama architecture, to instruct and delight.
+An implementation of the Llama architecture, to instruct and delight.
 
 ## Setup
 
@@ -12,12 +12,12 @@ pip install -r requirements.txt
 
 ### Developers
 ```
+git clone --recursive  # to run tests (against llama.c)
 python -m venv .venv
 echo 'PYTHONPATH="${PYTHONPATH:+$PYTHONPATH:}llama2_c"' >> .venv/bin/activate
 source .venv/bin/activate
 pip install -r requirements-dev.txt
 pre-commit install --hook-type pre-push
-git clone --recursive  # to run tests (against llama.c)
 chmod 755 dev
 ```
 and run `./dev` for test, type-checking and formatting (see `./dev --help`).
