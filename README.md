@@ -26,12 +26,11 @@ and run `./dev` for test, type-checking and formatting (see `./dev --help`).
 
 ## Todo
 
-1. implement model
-2. write design criteria section here
-3. compare model training loss to baseline and fix any issues
-4. implement training and optim
-5. compare against baseline again
-6. tidy and write anything for contributors
+1. write design criteria section here
+2. compare model training loss to baseline and fix any issues
+3. implement training and optim
+4. compare against baseline again
+5. tidy and write anything for contributors
 
 ## License
 
