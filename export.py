@@ -26,7 +26,7 @@ import numpy as np
 import torch
 from torch import nn
 
-from model import ModelArgs, Transformer
+from torch_model import ModelArgs, Transformer
 
 # -----------------------------------------------------------------------------
 # common utilities

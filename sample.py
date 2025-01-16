@@ -5,7 +5,7 @@ import os
 import pickle
 from contextlib import nullcontext
 import torch
-from model import ModelArgs, Transformer
+from torch_model import ModelArgs, Transformer
 from tokenizer import Tokenizer
 
 from tinystories import get_tokenizer_model_path

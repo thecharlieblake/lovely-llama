@@ -24,7 +24,7 @@ from datetime import datetime
 from functools import partial
 
 import torch
-from model import Transformer, ModelArgs
+from torch_model import Transformer, ModelArgs
 from torch.distributed import destroy_process_group, init_process_group
 from torch.nn.parallel import DistributedDataParallel as DDP
 
