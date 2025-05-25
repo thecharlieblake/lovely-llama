@@ -8,7 +8,7 @@ An implementation of the Llama architecture, to instruct and delight.
 ```
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 ```
 
 ### Developers
@@ -18,7 +18,7 @@ git submodule update --init
 python -m venv .venv
 echo 'PYTHONPATH="${PYTHONPATH:+$PYTHONPATH:}llama2_c"' >> .venv/bin/activate
 source .venv/bin/activate
-pip install -r requirements-dev.txt
+uv pip install -r requirements-dev.txt
 pre-commit install --hook-type pre-push
 chmod 755 dev
 ```
