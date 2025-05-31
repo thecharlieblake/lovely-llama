@@ -20,7 +20,7 @@ jobs:
       run: pip install uv
 
     - name: Install project deps
-      run: uv pip install --system -r uv.lock
+      run: uv pip sync --system -r uv.lock
 
     - name: Ruff format (check-only)
       run: uvx ruff format --check --diff
