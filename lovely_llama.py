@@ -36,7 +36,7 @@ class Transformer(Module):
         self.unembedding = glorot_normal(k_unembed, (dim, vocab_size))
 
     def __call__(self, idxs: Int[Array, " seq"]) -> Float[Array, "seq vocab"]:
-        x = self.embedding[idxs]
+        x: Float[Array, "seq dim"] = self.embedding[idxs]
         x = self.blocks(x)
         x = vmap(self.norm)(x)
         return x @ self.unembedding
@@ -78,9 +78,12 @@ class TransformerBlock(Module):
         self.ffn = SwiGLUFFN(dim, dim_ffn, k_ffn)
 
     def __call__(self, x: Float[Array, "seq dim"], **_) -> Float[Array, "seq dim"]:
-        # vmap adds "seq" axis to all non-attn ops, as they each operate per-token
-        x += self.attn(vmap(self.attn_norm)(x))
-        return x + vmap(self.ffn)(vmap(self.ffn_norm)(x))
+        x_attn = vmap(self.attn_norm)(x)
+        x_attn = self.attn(x_attn)
+        x += x_attn
+        x_ffn = vmap(self.ffn_norm)(x)
+        x_ffn = vmap(self.ffn)(x_ffn)
+        return x + x_ffn
 
 
 class GroupedQueryAttention(Module):
@@ -192,10 +195,10 @@ class SwiGLUFFN(Module):
         self.w_out = glorot_normal(k_out, (dim_ffn, dim))
 
     def __call__(self, x: Float[Array, " dim"]) -> Float[Array, " dim"]:
-        gate = x @ self.w_gate
-        x = vmap(swish)(x @ self.w_in)
-        x *= gate
-        return x @ self.w_out
+        x_ffn = x @ self.w_in
+        x_ffn = vmap(swish)(x_ffn)
+        x_ffn *= x @ self.w_gate
+        return x_ffn @ self.w_out
 
 
 def swish(x: Float[Array, ""]) -> Float[Array, ""]:

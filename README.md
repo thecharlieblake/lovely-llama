@@ -61,7 +61,6 @@ These are fulfilled practically via (points corresponding 1-to-1 with the ones a
 
 ## Todo
 
-- write out block vmapping in full
 - better vmap
 
 - implement training and optim (while keeping training parity with baseline)
