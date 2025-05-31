@@ -10,6 +10,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Add llama.c submodule
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git
+          git submodule update --init
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -20,7 +26,7 @@ jobs:
       run: pip install uv
 
     - name: Install project deps
-      run: uv sync uv.lock
+      run: uv sync
 
     - name: Ruff format (check-only)
       run: uvx ruff format --check --diff
