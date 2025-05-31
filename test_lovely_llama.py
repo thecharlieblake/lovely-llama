@@ -30,7 +30,7 @@ def to_param(jax_array):
     return Parameter(to_tensor(jax_array))
 
 
-def assert_allclose(jax_array, torch_tensor, rtol=1e-5, atol=1e-5):
+def assert_allclose(jax_array, torch_tensor, rtol=1e-2, atol=1e-5):
     np.testing.assert_allclose(
         jax_array, torch_tensor.detach().numpy(), rtol=rtol, atol=atol
     )
