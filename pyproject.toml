@@ -31,10 +31,6 @@ ignore = [
     "F722",  # [Syntax error in forward annotation]: to work with jaxtyping
 ]
 
-[tool.pyright]
-exclude = [".venv", "llama2_c", "typings"]
-typeCheckingMode = "strict"
-
 [tool.pytest.ini_options]
 addopts = "--jaxtyping-packages=lovely_llama,beartype.beartype --cov-report term-missing --ignore=llama2_c/"
 filterwarnings = "ignore:jax.core.pp_eqn_rules"  # deprecated pretty print in equinox
