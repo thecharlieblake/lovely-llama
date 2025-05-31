@@ -74,7 +74,7 @@ def scaled_dot_product_attention(
 
     dim_qk = q.shape[-1]
     qk = q @ k.T / sqrt(dim_qk)
-    qk += causal_mask(qk.shape)  # pyright: ignore [reportArgumentType]
+    qk += causal_mask(qk.shape)  # ty: ignore[invalid-argument-type]
     scores = vmap(softmax)(qk)
     return scores @ v
 

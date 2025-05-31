@@ -1,3 +1,28 @@
+[project]
+name = "lovely-llama"
+version = "0.1.0"
+description = "An implementation of the Llama architecture, to instruct and delight."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "equinox",
+    "jax",
+    "jaxtyping",
+]
+
+[dependency-groups]
+dev = [
+    "beartype",
+    "coverage",
+    "numpy<2.0.0",
+    "pre-commit",
+    "pytest",
+    "pytest-cov",
+    "pytest-sugar",
+    "torch ; platform_machine != 'x86_64'",
+    "torch<2.3.0 ; platform_machine == 'x86_64'",
+]
+
 [tool.ruff]
 exclude = [".venv", "llama2_c", "typings"]
 
@@ -6,11 +31,9 @@ ignore = [
     "F722",  # [Syntax error in forward annotation]: to work with jaxtyping
 ]
 
-
 [tool.pyright]
 exclude = [".venv", "llama2_c", "typings"]
 typeCheckingMode = "strict"
-
 
 [tool.pytest.ini_options]
 addopts = "--jaxtyping-packages=lovely_llama,beartype.beartype --cov-report term-missing --ignore=llama2_c/"

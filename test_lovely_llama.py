@@ -1,18 +1,17 @@
-# type: ignore
 import jax.numpy as jnp
 import jax.random as jrandom
 import numpy as np
 import torch
 from equinox import filter_grad
 from jax import Array, grad, vmap
-from model import Attention as TorchSelfAttention
-from model import FeedForward as TorchSwiGLUFFN
-from model import ModelArgs, apply_rotary_emb, precompute_freqs_cis
-from model import RMSNorm as TorchRMSNorm
-from model import Transformer as TorchTransformer
-from model import TransformerBlock as TorchTransformerBlock
 from torch.nn import Parameter
 
+from llama2_c.model import Attention as TorchSelfAttention
+from llama2_c.model import FeedForward as TorchSwiGLUFFN
+from llama2_c.model import ModelArgs, apply_rotary_emb, precompute_freqs_cis
+from llama2_c.model import RMSNorm as TorchRMSNorm
+from llama2_c.model import Transformer as TorchTransformer
+from llama2_c.model import TransformerBlock as TorchTransformerBlock
 from lovely_llama import (
     GroupedQueryAttention,
     RMSNorm,
@@ -256,38 +255,62 @@ def test_transformer():
 
     for l in range(LAYERS):  # noqa: E741
         torch_transformer.layers[l].attention_norm.weight = to_param(
-            transformer.blocks[l].attn_norm.gain
+            transformer.blocks[l].attn_norm.gain  # ty: ignore[unresolved-attribute]
         )
         torch_transformer.layers[l].ffn_norm.weight = to_param(
-            transformer.blocks[l].ffn_norm.gain
+            transformer.blocks[l].ffn_norm.gain  # ty: ignore[unresolved-attribute]
         )
 
         torch_transformer.layers[l].attention.wq.weight = to_param(
             jnp.reshape(
-                jnp.moveaxis(transformer.blocks[l].attn.w_query, -2, 0), (dim, -1)
+                jnp.moveaxis(
+                    transformer.blocks[
+                        l
+                    ].attn.w_query,  # ty: ignore[unresolved-attribute]
+                    -2,
+                    0,
+                ),
+                (dim, -1),
             ).T
         )
         torch_transformer.layers[l].attention.wk.weight = to_param(
             jnp.reshape(
-                jnp.moveaxis(transformer.blocks[l].attn.w_key, -2, 0), (dim, -1)
+                jnp.moveaxis(
+                    transformer.blocks[
+                        l
+                    ].attn.w_key,  # ty: ignore[unresolved-attribute]
+                    -2,
+                    0,
+                ),
+                (dim, -1),
             ).T
         )
         torch_transformer.layers[l].attention.wv.weight = to_param(
             jnp.reshape(
-                jnp.moveaxis(transformer.blocks[l].attn.w_value, -2, 0), (dim, -1)
+                jnp.moveaxis(
+                    transformer.blocks[
+                        l
+                    ].attn.w_value,  # ty: ignore[unresolved-attribute]
+                    -2,
+                    0,
+                ),
+                (dim, -1),
             ).T
         )
         torch_transformer.layers[l].attention.wo.weight = to_param(
-            jnp.reshape(transformer.blocks[l].attn.w_out, (-1, dim)).T
+            jnp.reshape(
+                transformer.blocks[l].attn.w_out,  # ty: ignore[unresolved-attribute]
+                (-1, dim),
+            ).T
         )
         torch_transformer.layers[l].feed_forward.w3.weight = to_param(
-            transformer.blocks[l].ffn.w_gate.T
+            transformer.blocks[l].ffn.w_gate.T  # ty: ignore[unresolved-attribute]
         )
         torch_transformer.layers[l].feed_forward.w1.weight = to_param(
-            transformer.blocks[l].ffn.w_in.T
+            transformer.blocks[l].ffn.w_in.T  # ty: ignore[unresolved-attribute]
         )
         torch_transformer.layers[l].feed_forward.w2.weight = to_param(
-            transformer.blocks[l].ffn.w_out.T
+            transformer.blocks[l].ffn.w_out.T  # ty: ignore[unresolved-attribute]
         )
 
     torch_transformer.norm.weight = to_param(transformer.norm.gain)

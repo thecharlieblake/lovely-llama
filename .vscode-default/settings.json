@@ -1,0 +1,19 @@
+{
+  "editor.formatOnSave": true,
+  "editor.inlayHints.enabled": "offUnlessPressed", // we already have clear types
+  "python.languageServer": "None", // required for ty
+  // editor ruff extension settings
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    },
+  },
+  // notebook ruff extension settings
+  "notebook.formatOnSave.enabled": true,
+  "notebook.codeActionsOnSave": {
+    "notebook.source.fixAll": "explicit",
+    "notebook.source.organizeImports": "explicit"
+  },
+}

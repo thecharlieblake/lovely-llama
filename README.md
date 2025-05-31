@@ -3,26 +3,45 @@ An implementation of the Llama architecture, to instruct and delight.
 
 ## Setup
 
+[Install uv](https://docs.astral.sh/uv/getting-started/installation/) and then run the following, depending on your use-case:
+
 ### Users
 
 ```
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+uv sync --no-dev
 ```
 
 ### Developers
 
+Setup:
+
 ```
+uv sync
 git submodule update --init
-python -m venv .venv
-echo 'PYTHONPATH="${PYTHONPATH:+$PYTHONPATH:}llama2_c"' >> .venv/bin/activate
-source .venv/bin/activate
-pip install -r requirements-dev.txt
 pre-commit install --hook-type pre-push
-chmod 755 dev
 ```
-and run `./dev` for test, type-checking and formatting (see `./dev --help`).
+
+Formatting / typechecking / testing:
+
+```
+uvx ruff format
+uvx ty check
+uv run pytest --cov
+```
+
+Developers may also wish to use the `ruff` and `ty` vscode extensions. Pre-configured setup can be applied via:
+
+```
+cp -r .vscode-default .vscode
+```
+
+and installing the extensions recommended in the popup.
+
+### Maintainers
+
+```
+uv lock --update
+```
 
 ## Principles for a lovely implementation
 
@@ -42,9 +61,12 @@ These are fulfilled practically via (points corresponding 1-to-1 with the ones a
 
 ## Todo
 
-1. compare model training loss to baseline and fix any issues
-2. implement training and optim (while keeping training parity with baseline)
+- write out block vmapping in full
+- better vmap
+
+- implement training and optim (while keeping training parity with baseline)
+- compare model training loss to baseline and fix any issues
 
 ## License
 
-This project is licensed under the MIT License (see `LICENSE`). It includes components that are derived from work licensed under the Apache License, Version 2.0 (`dev` script which is derived from https://github.com/graphcore-research/unit-scaling/blob/main/dev, and `typings/jax/` which is derived from https://github.com/google/jax/tree/main/jax/).
+This project is licensed under the MIT License (see `LICENSE`).
